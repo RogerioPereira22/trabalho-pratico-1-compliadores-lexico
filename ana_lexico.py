@@ -1,0 +1,1 @@
+File = open("EXS2.pas","r")
