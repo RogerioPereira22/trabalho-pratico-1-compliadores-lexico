@@ -1,1 +1,2 @@
-File = open("EXS2.pas","r")
+File = open("testes\EXS1.pas","r")
+    
