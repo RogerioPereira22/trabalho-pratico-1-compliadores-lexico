@@ -87,62 +87,70 @@ class AnalisadorLexicoPascal:
                 # Adiciona o caractere à string de caracteres
                 self.caracteres += caractere
 
-                # Verifica se a string de caracteres é composta apenas por letras
-                if self.caracteres.isalpha():
-                    # Verifica se a palavra é uma palavra reservada
-                    if self.verificar_palavra_reservada(self.caracteres):
-                        print(f"Palavra reservada: {self.caracteres}")
-                        self.caracteres = ''
-                    # Verifica se a palavra é um identificador válido
-                    elif self.verificar_identificador(self.caracteres):
-                        print(f"Identificador: {self.caracteres}")
-                        self.caracteres = ''
-
-                # Verifica se o caractere é um dígito
-                elif caractere.isdigit():
-                    # Loop para ler os próximos caracteres enquanto forem dígitos ou um ponto
-                    while True:
-                        proximo_caractere = arquivo.read(1)
-                        if not proximo_caractere or not proximo_caractere.isdigit() and proximo_caractere != '.':
-                            # Verifica se a string de caracteres contém um ponto, indicando um número real
-                            if '.' in self.caracteres:
-                                # Verifica se a string de caracteres é um número real válido
-                                if self.verificar_numero_real(self.caracteres):
-                                    print(f"Real: {self.caracteres}")
-                                    self.caracteres = ''
-                                else:
-                                    print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {self.caracteres}")
-                                    self.caracteres = ''
-                            else:
-                                # Verifica se a string de caracteres é um número inteiro válido
-                                if self.verificar_numero_inteiro(self.caracteres):
-                                    print(f"Inteiro: {self.caracteres}")
-                                    self.caracteres = ''
-                                else:
-                                    print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {self.caracteres}")
-                                    self.caracteres = ''
-                            break
-                        self.caracteres += proximo_caractere
-
-                # Verifica se o caractere é um operador válido
-                elif self.verificar_operador(caractere):
-                    print(f"Operador: {caractere}")
-
-                # Verifica se o caractere é um delimitador válido
-                elif self.verificar_delimitador(caractere):
-                    print(f"Delimitador: {caractere}")
-
                 # Verifica se o caractere é o início de um comentário
-                elif caractere == '{':
+                if caractere == "'":
                     # Loop para ler os próximos caracteres até encontrar o fim do comentário
                     while True:
                         proximo_caractere = arquivo.read(1)
-                        if proximo_caractere == '}':
+                        if proximo_caractere == "'":
                             break
+                        
+                if caractere == "/":
+                    # Lê o próximo caractere
+                    prox_caractere = arquivo.read(1)
+                    if prox_caractere == "/":
+                    # Loop para ler os próximos caracteres até encontrar o fim do comentário
+                        while True:
+                                proximo_caractere = arquivo.read(1)
+                                if proximo_caractere == "\n":
+                                    break
                 else:
-                    # Caractere inválido
-                    print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {caractere}")
-                    self.caracteres = ''
+                    # Verifica se a string de caracteres é composta apenas por letras
+                    if self.caracteres.isalpha():
+                        # Verifica se a palavra é uma palavra reservada
+                        if self.verificar_palavra_reservada(self.caracteres):
+                            #print(f"Palavra reservada: {self.caracteres}")
+                            self.caracteres = ''
+                        # Verifica se a palavra é um identificador válido
+                        elif self.verificar_identificador(self.caracteres):
+                            #print(f"Identificador: {self.caracteres}")
+                            self.caracteres = ''
+
+                    # Verifica se o caractere é um dígito
+                    elif caractere.isdigit():
+                        # Loop para ler os próximos caracteres enquanto forem dígitos ou um ponto
+                        while True:
+                            proximo_caractere = arquivo.read(1)
+                            if not proximo_caractere or not proximo_caractere.isdigit() and proximo_caractere != '.':
+                                # Verifica se a string de caracteres contém um ponto, indicando um número real
+                                if '.' in self.caracteres:
+                                    # Verifica se a string de caracteres é um número real válido
+                                    if self.verificar_numero_real(self.caracteres):
+                                        #print(f"Real: {self.caracteres}")
+                                        self.caracteres = ''
+                                    else:
+                                        print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {self.caracteres}")
+                                        #self.caracteres = ''
+                                else:
+                                    # Verifica se a string de caracteres é um número inteiro válido
+                                    if self.verificar_numero_inteiro(self.caracteres):
+                                        #print(f"Inteiro: {self.caracteres}")
+                                        self.caracteres = ''
+                                    else:
+                                        #print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {self.caracteres}")
+                                        self.caracteres = ''
+                                break
+                            self.caracteres += proximo_caractere
+
+                    # Verifica se o caractere é um operador válido
+                    elif self.verificar_operador(caractere):
+                        #print(f"Operador: {caractere}")
+                        True
+
+                    # Verifica se o caractere é um delimitador válido
+                    elif self.verificar_delimitador(caractere):
+                        #print(f"Delimitador: {caractere}")
+                        True
 
         print("Done")
 
