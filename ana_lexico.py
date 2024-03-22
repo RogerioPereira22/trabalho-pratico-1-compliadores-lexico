@@ -28,8 +28,8 @@ class AnalisadorLexicoPascal:
             float(palavra)
             return True
         except ValueError:
-            return False
-
+            return False     
+    
     def verificar_operador(self, caractere):
         operadores = ['+', '-', '*', '/', '=', '<', '>', '<=', '>=', '<>', ':=', ':']
         return caractere in operadores
@@ -98,11 +98,14 @@ class AnalisadorLexicoPascal:
                 else:
                     if self.caracteres.isalpha():
                         if self.verificar_palavra_reservada(self.caracteres):
-                            self.caracteres = ''
+                            self.caracteres = '' # Reinicia a palavra
                         elif self.verificar_identificador(self.caracteres):
-                            self.caracteres = ''
+                            self.caracteres = '' # Reinicia a palavra
+                        elif self.contem_numeros(self.caracteres):  # Verifica se contém números
+                            print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: A palavra '{self.caracteres}' contém números.")
+                            self.caracteres = ''  # Reinicia a palavra
 
-                    elif self.caracteres.isdigit():  # Corrigido
+                    elif self.caracteres.isdigit(): 
                         while True:
                             proximo_caractere = arquivo.read(1)
                             if not proximo_caractere or not proximo_caractere.isdigit() and proximo_caractere != '.':
