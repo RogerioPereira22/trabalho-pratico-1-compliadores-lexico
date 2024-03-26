@@ -1,9 +1,13 @@
+
+
 class AnalisadorLexicoPascal:
+    
     def __init__(self, nome_arquivo):
+        self.verifica = True
         self.nome_arquivo = nome_arquivo
         self.caracteres = ''
         self.linha_atual = 1
-        self.coluna_atual = 0  # Corrigido para iniciar em 0
+        self.coluna_atual = 0  
         self.pilha_chaves = []
         self.pilha_colchetes = []
         self.pilha_parenteses = []
@@ -35,7 +39,7 @@ class AnalisadorLexicoPascal:
         return caractere in operadores
 
     def verificar_delimitador(self, caractere):
-        delimitadores = [';', ',', '(', ')', '[', ']']  # Corrigido
+        delimitadores = [';', ',', '(', ')', '[', ']'] 
         return caractere in delimitadores
 
     def script_analizador_lexico(self):
@@ -53,7 +57,8 @@ class AnalisadorLexicoPascal:
                     self.coluna_atual = 0  # Reinicia a coluna para 0
 
                 if caractere.isspace():
-                    continue
+                    caractere = arquivo.read(1)
+                
                  # Verifica se o caractere é uma chave aberta
                 if caractere == '{':
                     self.pilha_chaves.append((self.linha_atual, self.coluna_atual))
@@ -69,16 +74,14 @@ class AnalisadorLexicoPascal:
                 # Verifica se o caractere é uma chave fechada
                 elif caractere == ')':
                     if not self.pilha_parenteses:
-                        print(f"Erro: Chave fechada sem correspondente - Linha {self.linha_atual}, Coluna {self.coluna_atual}")
+                        print(f"Erro: Chave fechada sem correspondente - Linha {self.linha_atual}, Coluna {self.coluna_atual}: caractere{caractere}")
                     else:
                         self.pilha_parenteses.pop()
                         
                 elif caractere == '[':
                     self.pilha_colchetes.append((self.linha_atual, self.coluna_atual))
                 elif caractere == ']':
-                    if not self.pilha_colchetes:
-                        print(f"Erro: Chave fechada sem correspondente - Linha {self.linha_atual}, Coluna {self.coluna_atual}")
-                    else:
+                    if  self.pilha_colchetes:
                         self.pilha_colchetes.pop()
                 self.caracteres += caractere
 
@@ -96,30 +99,22 @@ class AnalisadorLexicoPascal:
                             if proximo_caractere == "\n":
                                 break
                 else:
-                    if self.caracteres.isalpha():
-                        if self.verificar_palavra_reservada(self.caracteres):
-                            self.caracteres = '' # Reinicia a palavra
-                        elif self.verificar_identificador(self.caracteres):
-                            self.caracteres = '' # Reinicia a palavra
-                        elif self.contem_numeros(self.caracteres):  # Verifica se contém números
-                            print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: A palavra '{self.caracteres}' contém números.")
-                            self.caracteres = ''  # Reinicia a palavra
+                    if caractere.isalpha():
+                        if self.verificar_palavra_reservada(caractere):
+                            pass
+                        elif self.verificar_identificador(caractere):
+                            pass
 
                     elif self.caracteres.isdigit(): 
                         while True:
                             proximo_caractere = arquivo.read(1)
                             if not proximo_caractere or not proximo_caractere.isdigit() and proximo_caractere != '.':
-                                if '.' in self.caracteres:
-                                    if self.verificar_numero_real(self.caracteres):
-                                        self.caracteres = ''
-                                    else:
-                                        print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {self.caracteres}")
+                                if '.' in self.caractere:
+                                    if self.verificar_numero_real(caractere):
+                                        pass
                                 else:
-                                    if self.verificar_numero_inteiro(self.caracteres):
-                                        self.caracteres = ''
-                                    else:
-                                        self.caracteres = ''
-                                break
+                                    if self.verificar_numero_inteiro(caractere):
+                                        pass
                             self.caracteres += proximo_caractere
 
                     elif self.verificar_operador(caractere):
@@ -127,6 +122,10 @@ class AnalisadorLexicoPascal:
 
                     elif self.verificar_delimitador(caractere):
                         pass
+                        
+                    elif not caractere == " " and not caractere == "\n" and not caractere == "\t" and not caractere == "\r" and self.verifica != True:
+                         print(f"Erro: Linha {self.linha_atual}, Coluna {self.coluna_atual}: {caractere}")
+                                
         # Verifica se há chaves abertas sem correspondentes
         while self.pilha_chaves:
             linha, coluna = self.pilha_chaves.pop()

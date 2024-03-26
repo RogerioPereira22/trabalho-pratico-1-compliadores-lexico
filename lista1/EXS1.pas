@@ -57,6 +57,6 @@ begin;
 
  writeln (' ');
  write ('para encerrar o programa aperte qualquer tecla.');
- readkey;
+ readkey
 
 end.
